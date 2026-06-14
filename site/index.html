@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="neblina">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Visit Montalegre — Guia Interativo</title>
+<meta name="description" content="Guia turístico interativo de Montalegre: mapa, festividades, trilhos e serviços da Terra de Barroso." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cinzel:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="styles.css" />
+<link id="gfont-Roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap">
+<link id="gfont-Poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
+<link id="gfont-Quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap">
+<link id="gfont-Playfair-Display" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&amp;display=swap">
+<link id="gfont-Space-Grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap">
+
+<!-- Standalone-export: local images referenced inside JS (lifted so the bundler inlines them) -->
+<meta name="ext-resource-dependency" content="images/g-lagoa-geres.jpg" data-resource-id="images/g-lagoa-geres.jpg" />
+<meta name="ext-resource-dependency" content="images/g-ruas-montalegre.jpg" data-resource-id="images/g-ruas-montalegre.jpg" />
+<meta name="ext-resource-dependency" content="images/g-chega-bois.jpg" data-resource-id="images/g-chega-bois.jpg" />
+<meta name="ext-resource-dependency" content="images/g-mosteiro-pitoes.jpg" data-resource-id="images/g-mosteiro-pitoes.jpg" />
+<meta name="ext-resource-dependency" content="images/g-sexta13.jpg" data-resource-id="images/g-sexta13.jpg" />
+<meta name="ext-resource-dependency" content="images/g-alto-rabagao.jpg" data-resource-id="images/g-alto-rabagao.jpg" />
+<meta name="ext-resource-dependency" content="images/g-ponte-misarela.jpg" data-resource-id="images/g-ponte-misarela.jpg" />
+<meta name="ext-resource-dependency" content="images/hero-larouco.jpg" data-resource-id="images/hero-larouco.jpg" />
+<meta name="ext-resource-dependency" content="images/hero-castelo-neve.jpg" data-resource-id="images/hero-castelo-neve.jpg" />
+<meta name="ext-resource-dependency" content="images/sexta13.jpg" data-resource-id="images/sexta13.jpg" />
+<meta name="ext-resource-dependency" content="images/hero-misarela.jpg" data-resource-id="images/hero-misarela.jpg" />
+<meta name="ext-resource-dependency" content="images/hero-pitoes.jpg" data-resource-id="images/hero-pitoes.jpg" />
+<meta name="ext-resource-dependency" content="images/circuito-rally.webp" data-resource-id="images/circuito-rally.webp" />
+<meta name="ext-resource-dependency" content="images/sobre-planalto.jpg" data-resource-id="images/sobre-planalto.jpg" />
+<script>
+/* Resolves a local asset path to its inlined blob URL when bundled standalone;
+   returns the original path otherwise, so the normal multi-file site is unaffected. */
+window.__res = function (p) { return (window.__resources && window.__resources[p]) || p; };
+</script>
+</head>
+<body style="font-family: system-ui">
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Visit Montalegre — voltar ao início" style="font-family: &quot;Playfair Display&quot;"><img class="brand-logo" src="images/logo-crop.png" alt="" /><span class="brand-name">VISIT MONTALEGRE</span></a>
+    <nav class="xtabs" id="xtabs" aria-label="Tópicos"></nav>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-l="pt" aria-pressed="true">PT</button>
+      <button data-l="en" aria-pressed="false">EN</button>
+      <button data-l="es" aria-pressed="false">ES</button>
+    </div>
+    <a class="btn btn-primary nav-cta" href="#mapa" data-i18n="nav.cta">Abrir o mapa</a>
+    <button class="burger" id="burger" aria-label="Menu"><span></span></button>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<main id="top">
+<section class="hero" id="hero" aria-label="Montalegre">
+  <div class="wrap hero-in">
+    <span class="kicker" data-i18n="hero.kicker">Terra de Barroso · Trás-os-Montes</span>
+    <h1 class="hero-title" id="hero-title">Montalegre</h1>
+    <p class="hero-wordmark" aria-label="discover it beyond the map" style="font-family: Quicksand">discover it beyond the map</p>
+    <p class="hero-lead" data-i18n="hero.lead">Castelo, montanha e mistério. Um guia vivo para descobrir a capital do Barroso ao teu ritmo.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#mapa"><span data-i18n="hero.cta1">Explorar o mapa</span></a>
+      <a class="btn btn-ghost" href="#festas" data-i18n="hero.cta2">Festividades do ano</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v" style="font-family: system-ui">877<span style="font-size:0.5em"> m</span></div><div class="l" data-i18n="stats.altitude">Altitude da vila</div></div>
+      <div class="stat"><div class="v" style="font-family: system-ui">805<span style="font-size:0.5em"> km²</span></div><div class="l" data-i18n="stats.area">Área do concelho</div></div>
+      <div class="stat"><div class="v" style="font-family: system-ui">≈9 300</div><div class="l" data-i18n="stats.pop">Habitantes</div></div>
+      <div class="stat" style="font-family: system-ui"><div class="v">25</div><div class="l" data-i18n="stats.freg" style="font-family: &quot;Space Mono&quot;">Freguesias</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALERIA (marquee) ===================== -->
+<section class="gallery" id="galeria" aria-label="Galeria">
+  <div class="gallery-top reveal">
+    <span class="g-pill" id="g-pill"></span>
+    <h2 class="g-title" id="g-title"></h2>
+    <p class="g-desc" id="g-desc">Da serra do Larouco às lagoas do Gerês, das festas das bruxas às aldeias de granito — Montalegre em movimento.</p>
+    <a class="btn btn-primary g-cta" id="g-cta" href="#mapa"></a>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+</section>
+
+<!-- ===================== MAPA ===================== -->
+<section class="section" id="mapa">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="map.kicker">Explorar · Ao vivo</span>
+      <h2 class="s-title" data-i18n="map.title" style="font-size: 35px; font-family: sans-serif">UM MAPA PARA TE PERDERES (E TE ENCONTRARES)</h2>
+      <p class="s-lead" data-i18n="map.lead">Ativa as camadas, filtra por aquilo que procuras e toca nos pontos para ver detalhes.</p>
+    </div>
+    <div class="map-shell reveal">
+      <aside class="map-side">
+        <div class="panel">
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <input id="map-search" type="text" data-i18n-ph="map.search" placeholder="Procurar no mapa…" />
+          </div>
+        </div>
+        <div class="panel">
+          <h4 data-i18n="map.layers">Camadas</h4>
+          <div id="layers"></div>
+        </div>
+      </aside>
+      <div class="map-stage" id="map-stage"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FESTIVIDADES ===================== -->
+<section class="section" id="festas" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="festas.kicker">Calendário vivo</span>
+      <h2 class="s-title" data-i18n="festas.title" style="font-family: system-ui">Festividades ao longo do ano</h2>
+      <p class="s-lead" data-i18n="festas.lead">Da Feira do Fumeiro à Noite das Bruxas — o ano em Montalegre mede-se em festas.</p>
+    </div>
+    <div class="season-bar reveal" id="season-bar"></div>
+    <div class="timeline reveal" id="timeline"></div>
+  </div>
+</section>
+
+<!-- ===================== TRILHOS ===================== -->
+<section class="section" id="trilhos">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="trilhos.kicker">Trilhos & Natureza</span>
+      <h2 class="s-title" data-i18n="trilhos.title" style="font-family: system-ui">Caminhar o Barroso e o Gerês</h2>
+      <p class="s-lead" data-i18n="trilhos.lead">Percursos pedestres assinalados, do passeio em família às grandes rotas de montanha.</p>
+    </div>
+    <div class="trail-grid reveal" id="trail-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== ECOMUSEUS ===================== -->
+<section class="section" id="ecomuseus" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="ecomuseus.kicker">Ecomuseu de Barroso</span>
+      <h2 class="s-title" data-i18n="ecomuseus.title" style="font-family: system-ui">Um museu espalhado pelo concelho</h2>
+      <p class="s-lead" data-i18n="ecomuseus.lead">O Ecomuseu de Barroso não cabe num edifício: é uma rede de pólos pelas aldeias, cada um a contar uma parte da vida barrosã.</p>
+    </div>
+    <div class="eco-grid reveal" id="eco-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== SERRA DO LAROUCO ===================== -->
+<section class="section" id="larouco">
+  <div class="wrap">
+    <div class="s-head reveal" id="head-larouco"></div>
+    <div class="feature reveal" id="feat-larouco"></div>
+  </div>
+</section>
+
+<!-- ===================== CIRCUITO DE RALLYCROSS ===================== -->
+<section class="section" id="rally" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="s-head reveal" id="head-rally"></div>
+    <div class="feature reveal" id="feat-rally"></div>
+  </div>
+</section>
+
+<!-- ===================== SERVIÇOS ===================== -->
+<section class="section" id="servicos">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="servicos.kicker">Serviços públicos</span>
+      <h2 class="s-title" data-i18n="servicos.title" style="font-family: system-ui">O essencial, sempre à mão</h2>
+      <p class="s-lead" data-i18n="servicos.lead">Saúde, segurança e serviços do concelho num só sítio. Em emergência, liga 112.</p>
+    </div>
+    <div class="svc-top reveal">
+      <div class="svc-emerg">
+        <div class="num">112</div>
+        <div class="lbl"><b data-i18n="servicos.emergency">Emergência nacional</b><span>SOS · 24 h</span></div>
+      </div>
+      <div class="svc-emerg">
+        <div class="num">808</div>
+        <div class="lbl"><b data-i18n="servicos.sns">Linha SNS 24</b><span>808 24 24 24</span></div>
+      </div>
+    </div>
+    <div class="svc-grid reveal" id="svc-grid"></div>
+  </div>
+</section>
+
+<!-- ===================== SOBRE ===================== -->
+<section class="section" id="sobre">
+  <div class="wrap">
+    <div class="s-head reveal">
+      <span class="kicker" data-i18n="sobre.kicker">Sobre o concelho</span>
+      <h2 class="s-title" data-i18n="sobre.title" style="font-family: system-ui">Montalegre, em poucas linhas</h2>
+      <p class="s-lead" data-i18n="sobre.lead">Concelho raiano do Alto Trás-os-Montes, entre o planalto barrosão e o Parque Nacional da Peneda-Gerês.</p>
+    </div>
+    <div class="sobre-grid reveal">
+      <div>
+        <div class="fact-grid">
+          <div class="fact"><div class="v" style="font-family: system-ui">805<span style="font-size:0.55em"> km²</span></div><div class="l" data-i18n="stats.area">Área do concelho</div></div>
+          <div class="fact"><div class="v" style="font-family: system-ui">≈9 300</div><div class="l" data-i18n="stats.pop">Habitantes</div></div>
+          <div class="fact"><div class="v" style="font-family: system-ui">25
+
+</div><div class="l" data-i18n="stats.freg">Freguesias</div></div>
+          <div class="fact"><div class="v" style="font-family: system-ui">1273</div><div class="l">Foral</div></div>
+          <div class="fact"><div class="v" style="font-family: system-ui">877<span style="font-size:0.55em"> m</span></div><div class="l" data-i18n="stats.altitude">Altitude</div></div>
+          <div class="fact"><div class="v" style="font-family: system-ui">30+</div><div class="l" data-i18n="sobre.villages">Aldeias</div></div>
+        </div>
+        <ul class="curio" id="curio"></ul>
+        <h4 style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-2);margin:30px 0 4px" data-i18n="sobre.villages">As aldeias do concelho</h4>
+        <div class="villages" id="villages"></div>
+      </div>
+      <div class="sobre-media">
+        <img class="sobre-photo" src="images/sobre-planalto.jpg" alt="Planalto barrosão · Serra do Larouco" loading="lazy" style="object-fit: cover; width: 480px" />
+        <div class="sobre-cap">Planalto barrosão · Serra do Larouco</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand-block">
+        <div class="brand"><img class="footer-logo" src="images/logo-crop.png" alt="" />VISIT MONTALEGRE</div>
+        <p class="footer-wordmark" style="font-family: Quicksand">discover it beyond the map</p>
+        <p class="tag" data-i18n="footer.tag">Montalegre · Terra de Barroso</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5 data-i18n="nav.map">Explorar</h5>
+          <a href="#mapa" data-i18n="nav.map">Mapa</a>
+          <a href="#festas" data-i18n="nav.festas">Festividades</a>
+          <a href="#trilhos" data-i18n="nav.trilhos">Trilhos</a>
+          <a href="#ecomuseus" data-i18n="nav.ecomuseus">Ecomuseus</a>
+          <a href="#larouco" data-i18n="nav.larouco">Larouco</a>
+          <a href="#rally" data-i18n="nav.rally">Rallycross</a>
+          <a href="#servicos" data-i18n="nav.servicos">Serviços</a>
+        </div>
+        <div class="footer-col">
+          <h5 data-i18n="footer.follow">Seguir</h5>
+          <a href="https://www.cm-montalegre.pt" target="_blank" rel="noopener">cm-montalegre.pt</a>
+          <a href="https://www.instagram.com/municipiomontalegre/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.facebook.com/MunicipioMontalegre" target="_blank" rel="noopener">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-base">
+      <span data-i18n="footer.built">Guia turístico — proposta de redesenho</span>
+      <span class="mono">© 2026 · Montalegre</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MODAL ===================== -->
+<div class="modal-back" id="modal-back">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modal-close" aria-label="Fechar"></button>
+    <div class="ph modal-img" id="modal-img" data-label="Evento"></div>
+    <div class="modal-body">
+      <span class="cat-tag" id="modal-cat" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);display:inline-block;margin-bottom:10px"></span>
+      <div class="when" id="modal-when"></div>
+      <h3 id="modal-title"></h3>
+      <p id="modal-text"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOBILE DRAWER ===================== -->
+<div class="drawer" id="drawer">
+  <button class="close" id="drawer-close" aria-label="Fechar"></button>
+  <a href="#mapa" data-i18n="nav.map">Mapa</a>
+  <a href="#festas" data-i18n="nav.festas">Festividades</a>
+  <a href="#trilhos" data-i18n="nav.trilhos">Trilhos</a>
+  <a href="#ecomuseus" data-i18n="nav.ecomuseus">Ecomuseus</a>
+  <a href="#larouco" data-i18n="nav.larouco">Larouco</a>
+  <a href="#rally" data-i18n="nav.rally">Rallycross</a>
+  <a href="#servicos" data-i18n="nav.servicos">Serviços</a>
+  <a href="#sobre" data-i18n="nav.sobre">Sobre</a>
+  <a class="btn btn-primary" href="#mapa" data-i18n="nav.cta">Abrir o mapa</a>
+</div>
+
+<div id="tweaks-root"></div>
+
+<!-- scripts -->
+<script src="image-slot.js"></script>
+<script src="data.js"></script>
+<script src="places-live.js"></script>
+<script src="app.js"></script>
+<script>
+/* ---------- Hero title · cursor-proximity letters ---------- */
+(function () {
+  function initProximity() {
+    var title = document.getElementById('hero-title');
+    if (!title) return;
+    var text = (title.textContent || '').trim();
+    title.setAttribute('aria-label', text);
+    title.textContent = '';
+    var letters = [];
+    text.split('').forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'ltr';
+      s.setAttribute('aria-hidden', 'true');
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
+      s.style.setProperty('--p', '0');
+      title.appendChild(s);
+      letters.push(s);
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var mx = -9999, my = -9999;
+    var radius = 150; // px of influence around the cursor
+    function move(x, y) { mx = x; my = y; }
+    window.addEventListener('mousemove', function (e) { move(e.clientX, e.clientY); }, { passive: true });
+    window.addEventListener('touchmove', function (e) {
+      if (e.touches[0]) move(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    window.addEventListener('mouseleave', function () { move(-9999, -9999); });
+
+    function frame() {
+      for (var i = 0; i < letters.length; i++) {
+        var r = letters[i].getBoundingClientRect();
+        var dx = mx - (r.left + r.width / 2);
+        var dy = my - (r.top + r.height / 2);
+        var d = Math.sqrt(dx * dx + dy * dy);
+        // gaussian falloff
+        var p = Math.exp(-Math.pow(d / (radius / 2), 2) / 2);
+        letters[i].style.setProperty('--p', p.toFixed(3));
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initProximity);
+  else initProximity();
+})();
+</script>
+<script>
+/* ---------- Galeria · image marquee ---------- */
+(function () {
+  var IMAGES = [
+    { src: "images/g-lagoa-geres.jpg",     alt: { pt: "Lagoas do Gerês", en: "Gerês lagoons", es: "Lagunas del Gerês" } },
+    { src: "images/g-ruas-montalegre.jpg", alt: { pt: "Ruas de Montalegre", en: "Streets of Montalegre", es: "Calles de Montalegre" } },
+    { src: "images/g-chega-bois.jpg",      alt: { pt: "Chega de bois", en: "Ox fighting · chega de bois", es: "Pelea de bueyes" } },
+    { src: "images/g-mosteiro-pitoes.jpg", alt: { pt: "Mosteiro de Pitões das Júnias", en: "Pitões das Júnias Monastery", es: "Monasterio de Pitões das Júnias" } },
+    { src: "images/g-sexta13.jpg",         alt: { pt: "Sexta 13 · Noite das Bruxas", en: "Friday 13th · Witches' Night", es: "Viernes 13 · Noche de las Brujas" } },
+    { src: "images/g-alto-rabagao.jpg",    alt: { pt: "Albufeira do Alto Rabagão", en: "Alto Rabagão reservoir", es: "Embalse del Alto Rabagão" } },
+    { src: "images/g-ponte-misarela.jpg",  alt: { pt: "Ponte da Misarela", en: "Misarela Bridge", es: "Puente de Misarela" } },
+    { src: "images/hero-larouco.jpg",      alt: { pt: "Serra do Larouco", en: "Larouco range", es: "Sierra del Larouco" } },
+    { src: "images/hero-castelo-neve.jpg", alt: { pt: "Castelo de Montalegre na neve", en: "Montalegre Castle in snow", es: "Castillo de Montalegre con nieve" } }
+  ];
+  var T = {
+    pill: { pt: "Terra de Barroso · Em imagens", en: "Land of Barroso · In pictures", es: "Tierra de Barroso · En imágenes" },
+    title: { pt: "Um território para ver", en: "A land made to be seen", es: "Un territorio para ver" },
+    desc: { pt: "Da serra do Larouco às lagoas do Gerês, das festas de fogo às aldeias de granito — Montalegre em movimento.", en: "From the Larouco range to the Gerês lagoons, from fire feasts to granite villages — Montalegre in motion.", es: "De la sierra del Larouco a las lagunas del Gerês, de las fiestas de fuego a las aldeas de granito — Montalegre en movimiento." },
+    cta: { pt: "Explorar o mapa", en: "Explore the map", es: "Explorar el mapa" }
+  };
+  function lang() { var l = localStorage.getItem("mlg_lang") || "pt"; return ["pt","en","es"].indexOf(l) >= 0 ? l : "pt"; }
+  function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  function init() {
+    var track = document.getElementById("marquee-track");
+    if (!track) return;
+    function build() {
+      var l = lang();
+      var set = IMAGES.map(function (im) {
+        return '<div class="marq-card"><img src="' + window.__res(im.src) + '" alt="' + esc(im.alt[l]) + '" loading="lazy"></div>';
+      }).join("");
+      track.innerHTML = set + set;
+    }
+    function text() {
+      var l = lang();
+      document.getElementById("g-pill").textContent = T.pill[l];
+      document.getElementById("g-title").textContent = T.title[l];
+      document.getElementById("g-desc").textContent = T.desc[l];
+      document.getElementById("g-cta").textContent = T.cta[l];
+    }
+    build(); text();
+    var prev = window.MLG_onLang;
+    window.MLG_onLang = function () { if (typeof prev === "function") prev(); build(); text(); };
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+
+<template id="__bundler_thumbnail" data-bg-color="#eceff1">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100" height="100" fill="#eceff1"/>
+  <path d="M14 64 q6 -3 10 -10 q5 -9 12 -10 q3 6 9 7 q7 1 11 -8 q5 -10 13 -9 q4 8 12 11 l4 3 v6 H14 Z" fill="#13a3df"/>
+  <path d="M40 47 q5 4 9 5" fill="none" stroke="#eceff1" stroke-width="2" stroke-linecap="round"/>
+</svg>
+</template>
+
+</body>
+</html>
